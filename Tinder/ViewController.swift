@@ -28,9 +28,35 @@ class ViewController: UIViewController {
 
         let card = sender.view!
 
+//        card.center = sender.location(in: self.view)
+
         let point = sender.translation(in: view)
 
         card.center = CGPoint(x: card.center.x + point.x, y:card.center.y + point.y)
+
+        if sender.state == UIGestureRecognizer.State.ended {
+            // 左に大きくスワイプ
+            if card.center.x < 75 {
+                UIView.animate(withDuration: 0.2, animations: {
+                    card.center = CGPoint(x: card.center.x - 250,y: card.center.y)
+                })
+                return
+            // 右に大きくスワイプ
+            } else if card.center.x > self.view.frame.width - 75 {
+                UIView.animate(withDuration: 0.2, animations: {
+                    card.center = CGPoint(x: card.center.x - 250,y: card.center.y)
+                })
+                return
+            }
+
+            // 元に戻る処理
+            UIView.animate(withDuration: 0.2, animations: {
+                card.center = self.centerOfCard
+            })
+            card.center = centerOfCard
+        }
+
     }
+
 }
 
