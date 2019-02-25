@@ -24,7 +24,7 @@ class ViewController: UIViewController {
 
     let name = ["ほのか","あかね","ちあき","カルロス"]
     var likedName = [String]()
-
+    /*
     override func viewDidLoad() {
         super.viewDidLoad()
         centerOfCard = basicCard.center
@@ -33,11 +33,36 @@ class ViewController: UIViewController {
         people.append(person3)
         people.append(person4)
     }
+*/
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        centerOfCard = basicCard.center
 
+        // 各配列情報を初期化
+        people.removeAll()
+        likedName.removeAll()// リストを初期化しない場合はこの処理は不要
+        // カウントもゼロに戻す
+        selectedCardCount = 0
+
+        people.append(person1)
+        people.append(person2)
+        people.append(person3)
+        people.append(person4)
+
+        resetPeople()
+    }
 
     func resetCard() {
-    basicCard.center = self.centerOfCard
-    basicCard.transform = .identity
+        basicCard.center = self.centerOfCard
+        basicCard.transform = .identity
+    }
+
+    func resetPeople() {
+        // ４人の飛んで行ったビューを元の位置に戻す
+        for i in 0..<4 {
+            people[i].center = self.centerOfCard
+            people[i].transform = .identity
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -79,13 +104,10 @@ class ViewController: UIViewController {
     @IBAction func swipeCard(_ sender: UIPanGestureRecognizer) {
 
         let card = sender.view!
-
         let point = sender.translation(in: view)
 
         card.center = CGPoint(x: card.center.x + point.x, y:card.center.y + point.y)
         people[selectedCardCount].center = CGPoint(x: card.center.x + point.x, y:card.center.y + point.y)
-
-
 
         // 元々の位置とい移動先との差（角度を変える）
         let xfromCenter = card.center.x - view.center.x
